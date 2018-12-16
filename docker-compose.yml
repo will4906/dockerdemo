@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  db:
+    restart: always
+    image: postgres
+    volumes:
+    - "./database:/var/lib/postgresql"
+    ports:
+    - "5432:5432"
+    env_file:
+    - ./.env
+  nginx:
+    restart: always
+    image: nginx
+    ports:
+    - "80:80"
+    volumes:
+    - "./nginx:/etc/nginx/conf.d/"
+    depends_on:
+    - web
+  web:
+    restart: always
+    build: .
+    env_file:
+    - ./.env
+    command:
+      - /bin/sh
+      - -c
+      - |
+        sleep 8
+        python3 manage.py migrate
+        gunicorn -w 3 -b 0.0.0.0:8123 dockerdemo.wsgi:application
+    ports:
+    - "8123:8123"
+    depends_on:
+    - db
+      
