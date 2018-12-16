@@ -8,7 +8,9 @@
 
 ## Usage
 
-仅在ubuntu16.04环境中验证过
+仅在ubuntu环境中验证过
+
+安装完成docker, docker-compose之后
 
 * `git clone https://github.com/will4906/dockerdemo`
 * `cd dockerdemo`

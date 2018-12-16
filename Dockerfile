@@ -1,12 +1,15 @@
 FROM node:8 as builder
 
-ADD ./web /app/web
 WORKDIR /app/web
-
+ADD ./web /app/web
 
 RUN npm config set sass_binary_site https://npm.taobao.org/mirrors/node-sass/
 RUN npm install --registry=https://registry.npm.taobao.org
+
 RUN npm run build
+RUN npm cache clean --force \
+ && rm -r ./node_modules
+
 
 FROM python:3.7 as prod
 ENV PYTHONUNBUFFERED 1
